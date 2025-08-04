@@ -1,5 +1,8 @@
 package repository.model;
 
+import java.time.LocalDate;
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
@@ -8,7 +11,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -25,13 +29,20 @@ public class Paciente {
     private String apellido;
     @Column(name = "paci_cedula", unique = true)
     private String cedula;
+    @Column(name = "paci_fechaNacimiento")
+    private LocalDate fechaNacimiento;
 
-    @ManyToOne
-    @JoinColumn(name = "id_doctor")
+    // relaciones
+    @OneToMany(mappedBy = "paciente")
     @JsonIgnore
-    private Doctor doctor;
-    
+    private List<Cita> citas;
 
+    @OneToOne
+    @JoinColumn(name = "usuario_id")
+    @JsonIgnore
+    private Usuario usuario;
+
+    // GET y SET
     public Integer getId() {
         return id;
     }
@@ -64,12 +75,20 @@ public class Paciente {
         this.cedula = cedula;
     }
 
-    public Doctor getDoctor() {
-        return doctor;
+    public LocalDate getFechaNacimiento() {
+        return fechaNacimiento;
     }
 
-    public void setDoctor(Doctor doctor) {
-        this.doctor = doctor;
+    public void setFechaNacimiento(LocalDate fechaNacimiento) {
+        this.fechaNacimiento = fechaNacimiento;
     }
 
+    public List<Cita> getCitas() {
+        return citas;
+    }
+
+    public void setCitas(List<Cita> citas) {
+        this.citas = citas;
+    }
+    
 }

@@ -1,9 +1,8 @@
 package repository;
 
-import java.util.List;
-
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
@@ -17,29 +16,20 @@ public class DoctorRepoImpl implements IDoctorRepo {
     private EntityManager entityManager;
 
     @Override
-    public Doctor seleccionarPorId(String cedula) {
-        return this.entityManager.find(Doctor.class, cedula);
-    }
-
-    @Override
-    public List<Doctor> seleccionarTodos() {
-        TypedQuery<Doctor> myQuery = this.entityManager.createQuery("SELECT d FROM Doctor d", Doctor.class);
-        return myQuery.getResultList();
+    public Doctor seleccionarPorCedula(String cedula) {
+        try {
+            TypedQuery<Doctor> myQuery = this.entityManager
+                    .createQuery("SELECT d FROM Doctor d WHERE d.cedula = :cedula", Doctor.class);
+            myQuery.setParameter("cedula", cedula);
+            return myQuery.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
     @Override
     public void insertar(Doctor doctor) {
         this.entityManager.persist(doctor);
-    }
-
-    @Override
-    public void actualizar(Doctor doctor) {
-        this.entityManager.merge(doctor);
-    }
-
-    @Override
-    public void eliminarPorId(String cedula) {
-        this.entityManager.remove(seleccionarPorId(cedula));
     }
 
 }
