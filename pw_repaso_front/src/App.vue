@@ -1,13 +1,15 @@
 <template>
   <nav>
     <router-link to="/">Doctor</router-link> |
-    <router-link to="/paciente">Paciente</router-link> 
+    <router-link to="/paciente">Paciente</router-link> |
+    <router-link to="/crear">Crear Materias</router-link> |
+    <router-link to="/consultar">Consultar Materias</router-link>
   </nav>
-  <router-view/>
+  <router-view />
 </template>
 
 <style>
-*{
+* {
   margin: 0;
   padding: 0;
 }
